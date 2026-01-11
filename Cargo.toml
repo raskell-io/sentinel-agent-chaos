@@ -1,0 +1,28 @@
+[package]
+name = "sentinel-agent-chaos"
+version = "0.1.0"
+edition = "2021"
+authors = ["Sentinel Core Team"]
+description = "Chaos Engineering agent for Sentinel - controlled fault injection for resilience testing"
+license = "MIT"
+repository = "https://github.com/raskell-io/sentinel-agent-chaos"
+keywords = ["sentinel", "chaos-engineering", "fault-injection", "resilience", "testing"]
+categories = ["development-tools::testing", "network-programming"]
+
+[dependencies]
+sentinel-agent-sdk = { git = "https://github.com/raskell-io/sentinel-agent-rust-sdk.git", branch = "main" }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+async-trait = "0.1"
+serde = { version = "1", features = ["derive"] }
+serde_yaml = "0.9"
+regex = "1"
+rand = "0.8"
+chrono = { version = "0.4", features = ["serde"] }
+chrono-tz = "0.10"
+clap = { version = "4", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1"
+
+[dev-dependencies]
+tokio-test = "0.4"
