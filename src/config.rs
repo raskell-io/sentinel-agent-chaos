@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::path::Path;
 
 /// Main configuration for the Chaos agent.
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
 #[serde(default)]
 pub struct Config {
     /// Global settings.
@@ -17,16 +17,6 @@ pub struct Config {
     /// Fault experiments.
     #[serde(default)]
     pub experiments: Vec<Experiment>,
-}
-
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            settings: Settings::default(),
-            safety: SafetyConfig::default(),
-            experiments: Vec::new(),
-        }
-    }
 }
 
 impl Config {

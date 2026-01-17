@@ -1,6 +1,6 @@
 [package]
 name = "sentinel-agent-chaos"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Sentinel Core Team"]
 description = "Chaos Engineering agent for Sentinel - controlled fault injection for resilience testing"
@@ -10,10 +10,14 @@ keywords = ["sentinel", "chaos-engineering", "fault-injection", "resilience", "t
 categories = ["development-tools::testing", "network-programming"]
 
 [dependencies]
-sentinel-agent-sdk = "0.1"
-tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+# Using local path for development until 0.2 is published to crates.io
+sentinel-agent-sdk = { path = "../sentinel-agent-rust-sdk", features = ["v2"] }
+# Direct access to protocol types for metrics
+sentinel-agent-protocol = "0.3"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }
 async-trait = "0.1"
 serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 serde_yaml = "0.9"
 regex = "1"
 rand = "0.8"

@@ -13,7 +13,7 @@ pub enum FaultResult {
     /// Request should be allowed after optional delay.
     Allow { delay: Option<Duration> },
     /// Request should be blocked with a response.
-    Block(Decision),
+    Block(Box<Decision>),
 }
 
 /// Apply a fault to a request.
@@ -110,13 +110,13 @@ fn apply_error(
         .with_block_header("x-chaos-injected", "true")
         .with_block_header("x-chaos-experiment", experiment_id)
         .with_body(body.to_string())
-        .with_tag(&format!("chaos:{}", experiment_id));
+        .with_tag(format!("chaos:{}", experiment_id));
 
     for (name, value) in headers {
         decision = decision.with_block_header(name, value);
     }
 
-    FaultResult::Block(decision)
+    FaultResult::Block(Box::new(decision))
 }
 
 /// Apply timeout fault - sleep then return 504 Gateway Timeout.
@@ -148,9 +148,9 @@ async fn apply_timeout(
         .with_block_header("x-chaos-injected", "true")
         .with_block_header("x-chaos-experiment", experiment_id)
         .with_body("Gateway Timeout (chaos fault)".to_string())
-        .with_tag(&format!("chaos:{}", experiment_id));
+        .with_tag(format!("chaos:{}", experiment_id));
 
-    FaultResult::Block(decision)
+    FaultResult::Block(Box::new(decision))
 }
 
 /// Apply throttle fault - return metadata for slow response delivery.
@@ -232,9 +232,9 @@ fn apply_corrupt(
         .with_block_header("x-chaos-injected", "true")
         .with_block_header("x-chaos-experiment", experiment_id)
         .with_body(garbage)
-        .with_tag(&format!("chaos:{}", experiment_id));
+        .with_tag(format!("chaos:{}", experiment_id));
 
-    FaultResult::Block(decision)
+    FaultResult::Block(Box::new(decision))
 }
 
 /// Apply reset fault - simulate connection reset.
@@ -262,9 +262,9 @@ fn apply_reset(
         .with_block_header("x-chaos-injected", "true")
         .with_block_header("x-chaos-experiment", experiment_id)
         .with_body("Connection reset (chaos fault)".to_string())
-        .with_tag(&format!("chaos:{}", experiment_id));
+        .with_tag(format!("chaos:{}", experiment_id));
 
-    FaultResult::Block(decision)
+    FaultResult::Block(Box::new(decision))
 }
 
 /// Generate random garbage data.
